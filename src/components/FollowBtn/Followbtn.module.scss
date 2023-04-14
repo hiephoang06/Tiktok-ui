@@ -1,0 +1,22 @@
+.follow-btn {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    color: rgba(254, 44, 85, 1);
+    border-color: rgba(254, 44, 85, 1);
+    background-color: rgba(255, 255, 255, 1);
+    font-size: 16px;
+    padding: 0 10px;
+    top: 28px;
+    min-width: 88px;
+    box-sizing: border-box;
+    padding-right: 1rem;
+    padding: 0.5rem;
+    padding-left: 0.5rem;
+    cursor: pointer;
+    margin-left: 230px;
+
+    &:hover {
+        background-color: rgb(245, 220, 225);
+    }
+}

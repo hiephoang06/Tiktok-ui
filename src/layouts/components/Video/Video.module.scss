@@ -1,0 +1,44 @@
+.Video-content {
+    display: flex;
+}
+.video {
+    width: 500px;
+    max-height: 560px;
+    margin-left: 50px;
+    border-radius: 0.375rem; /* 6px */
+    margin-top: 1.5rem;
+    scroll-snap-type: y mandatory;
+}
+.icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-left: 2rem;
+}
+.text {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.around {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(226 232 240);
+    cursor: pointer;
+}
+.video-wrapper {
+    scroll-snap-align: start;
+    max-width: 600px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 2.5rem;
+    padding-top: 3rem;
+}
+.info {
+    display: flex;
+}
+.heart {
+    color: red;
+}

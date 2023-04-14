@@ -1,0 +1,19 @@
+.wrapper {
+    display: flex;
+}
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.infor {
+    margin-left: 1rem;
+    min-width: 80%;
+}
+
+.name-user {
+    &:hover {
+        text-decoration: underline;
+    }
+}

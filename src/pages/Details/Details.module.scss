@@ -1,0 +1,59 @@
+.wrapper {
+    display: flex;
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    flex-wrap: wrap;
+    @media screen {
+        flex-wrap: nowrap;
+    }
+}
+.inner {
+    position: relative;
+    width: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    @media screen {
+        width: 65%;
+    }
+}
+.cancle {
+    position: absolute;
+    top: 1.5rem;
+    left: 0.5rem;
+    display: flex;
+    gap: 1.5rem; /* 24px */
+    z-index: 50;
+    @media screen {
+        left: 1.5rem;
+    }
+}
+.video {
+    height: 60vh;
+    @media screen {
+        height: 100vh;
+    }
+}
+.user {
+    border-bottom: 1px solid #ccc;
+    padding: 3rem;
+    padding-top: 6rem;
+}
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.infor {
+    margin-left: 1rem;
+    min-width: 80%;
+}
+.name-user {
+    &:hover {
+        text-decoration: underline;
+    }
+}

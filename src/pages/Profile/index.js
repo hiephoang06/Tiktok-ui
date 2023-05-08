@@ -4,13 +4,51 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import styles from './Profile.module.scss';
 import { useParams } from 'react-router-dom';
+import Button from '~/components/Button/Button';
 
 const cx = classNames.bind(styles);
 
+
+
+
+ const UserInfor = ({profile}) => {
+    async function handleFollow(){
+        const accessToken = localStorage.getItem("accessToken");
+        const res = await fetch('http://localhost:3001/api/profile/',{
+            method:"post",
+            headers:{
+                'Authorization':`Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        })
+    }
+    const http = profile?.avatarLarger.split(':')[0];
+    return (
+    <div>
+            <div className={cx('wrapper')}>
+                <img 
+                    className={cx('avatar')}
+                    src={http === 'https' ? profile?.avatarLarger : 'http://localhost:3001/images/' + profile?.avatarLarger}
+                />
+                <div className={cx('infor')}>
+                    <div>
+                        <h1>{profile?.uniqueId}</h1>
+                        <h3>{profile?.nickName}</h3> 
+                    </div>
+                    <div>
+                        <Button primary onClick={handleFollow}>Follow</Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 function Profile() {
-    const uniqueId = useParams();
-    console.log(uniqueId);
+    const id = useParams();
     const [showUserVideo, setshowUserVideo] = useState(true);
+    const [infor,setInfor] = useState(null);
+
     useEffect(() => {
         if (showUserVideo) {
             <h3>Video cua minh</h3>;
@@ -19,83 +57,76 @@ function Profile() {
         }
     }, [showUserVideo]);
 
-    return (
-        <div>
-            {/* thông tin người dùng */}
-            <div className={cx('wrapper')}>
-                <img
-                    className={cx('avatar')}
-                    src="https://p16-sign-sg.tiktokcdn.com/aweme/100x100/tos-alisg-avt-0068/f0d5299a324e257a6972ea68015c85c4.jpeg?x-expires=1677758400&x-signature=Xrn3UO8wKoaRPW1Hy%2FgmbAmSBZo%3D"
-                    alt="avatar"
-                />
-                <div className={cx('infor')}>
-                    <div>
-                        <h1>{uniqueId.nickname}</h1>
-                        <h3>Nickname</h3>
-                    </div>
-                    <div>
-                        <button className={cx('edit-btn')}>
-                            <FontAwesomeIcon icon={faPenToSquare} /> Sửa hồ sơ
-                        </button>
-                    </div>
-                </div>
-            </div>
-            {/* hiển thị follow */}
-            <div className={cx('count-info')}>
-                <div>
-                    <strong>0 </strong>
-                    <span className={cx('item-count')}>Đang Follow</span>
-                </div>
-                <div>
-                    <strong>0 </strong>
-                    <span className={cx('item-count')}>Follower</span>
-                </div>
-                <div>
-                    <strong>0 </strong>
-                    <span className={cx('item-count')}>Thích</span>
-                </div>
-            </div>
-            {/* description */}
-            <div>
-                <h4>Chưa có tiểu sử</h4>
-            </div>
+      useEffect(() => {
+        async function fetchMyAPI() {
+            try {
+                const request = `http://localhost:3001/api/profile/${id.nickname}`
+                const response = await fetch(request)
+                const responseJson = await response.json()
+                setInfor(responseJson)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchMyAPI()
+      }, [])
 
+      
+    return (
+
+    <div>
+        <UserInfor {...infor}/>
+
+       <div className={cx('count-info')}>
             <div>
-                <div className={cx('layout-video-like')}>
-                    <p
-                        className={cx('text-video')}
-                        onClick={() => setshowUserVideo(true)}
-                        style={
-                            showUserVideo
-                                ? {
-                                      borderColor: 'rgb(0 0 0);',
-                                      borderBottomWidth: '2px',
-                                      borderBottomStyle: 'solid',
-                                  }
-                                : { color: 'rgb(156 163 175)' }
-                        }
-                    >
-                        Video
-                    </p>
-                    <p
-                        className={cx('text-video')}
-                        onClick={() => setshowUserVideo(false)}
-                        style={
-                            !showUserVideo
-                                ? {
-                                      borderColor: 'rgb(0 0 0);',
-                                      borderBottomWidth: '2px',
-                                      borderBottomStyle: 'solid',
-                                  }
-                                : { color: 'rgb(156 163 175)' }
-                        }
-                    >
-                        Liked
-                    </p>
-                </div>
-                <div></div>
+                <strong> {infor?.following} </strong>
+                <span className={cx('item-count')}>Đang Follow</span>
             </div>
-        </div>
+            <div>
+                <strong> {infor?.follower} </strong>
+                <span className={cx('item-count')}>Follower</span>
+            </div>
+            <div>
+                <strong> {infor?.totalLikes} </strong>
+                <span className={cx('item-count')}>Thích</span>
+            </div>
+       </div>
+       <div>
+            <h4>Chưa có tiểu sử</h4>
+       </div>
+       <div>
+            <div className={cx('layout-video-like')}>
+                <p className={cx('text-video')}
+                    onClick={()=> setshowUserVideo(true)}
+                    style={
+                        showUserVideo 
+                            ? {
+                                borderBottomWidth:'2px',
+                                borderBottomStyle:'solid'
+                            }
+                            :{color:'rgb(156 163 175)'}
+                    }
+                >
+                    Video
+                </p>
+                <p className={cx('text-video')}
+                    onClick={()=>setshowUserVideo(false)}
+                    style={
+                        !showUserVideo
+                            ?{
+                                borderBottomWidth:'2px',
+                                borderBottomStyle:'solid'
+                            } 
+                            :{
+                                color:'rgb(156 163 175)'
+                            }  
+                    }
+                >
+                    Liked
+                </p>
+            </div>
+       </div>
+    </div>
     );
 }
 

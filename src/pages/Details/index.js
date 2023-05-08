@@ -7,17 +7,19 @@ import Comment from '~/components/Comment';
 import ShowComment from '~/layouts/components/ShowComments';
 import styles from './Details.module.scss';
 import ReactPlayer from 'react-player';
-import { Link, useParams } from 'react-router-dom';
-
+import { Link, useNavigate, useParams } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function Details() {
-    const videoRef = useRef(null);
-    const [playing, setPlaying] = useState(false);
-    const [videos, setVideos] = useState([]);
+    const navigate = useNavigate();
+
+
+    // const videoRef = useRef(null);
+    // const [playing, setPlaying] = useState(false);
+    // const [videos, setVideos] = useState([]);
     const params = useParams();
     const [details, setDetails] = useState([{}]);
-    const [infor, setInfor] = useState([]);
+    // const [infor, setInfor] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,35 +27,23 @@ function Details() {
                 .then((res) => res.json())
                 .then((details) => setDetails(details));
         };
-        const fetchdata = async () => {
-            const data = await fetch(`http://localhost:3001/api/profile/details/${params.uniqueId}`)
-                .then((res) => res.json())
-                .then((infor) => setInfor(infor));
-        };
         fetchData().catch(console.error);
-        fetchdata().catch(console.error);
     }, []);
-
-    // console.log(details);
-
-    console.log(infor);
-
-    // const http = infor.avatarLarger.split(':')[0];
 
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <div className={cx('cancel')}>
+                <div className={cx('cancle')}>
                     <p>
-                        <Link to={'/'}>
-                            <FontAwesomeIcon icon={faCircleXmark} style={{ fontSize: '35px', color: 'white' }} />
-                        </Link>
+                        {/* <Link to={'/'}> */}
+                            <FontAwesomeIcon icon={faCircleXmark} style={{ fontSize: '35px', color: 'white' }} onClick={() => navigate(-1)} />
+                        {/* </Link> */}
                     </p>
                 </div>
                 <div style={{ position: 'relative' }}>
                     <div className={cx('video')}>
                         <ReactPlayer
-                            url={'http://localhost:3001/videos/' + details[0].videoUrl}
+                            url={'http://localhost:3001/videos/' + details[0]?.videoUrl}
                             height="100%"
                             playing={true}
                             controls={true}
@@ -62,23 +52,10 @@ function Details() {
                 </div>
             </div>
 
-            <div className={cx('wrapper-user')}>
-                <div className={cx('user')}>
-                    <img
-                        className={cx('avatar')}
-                        src={
-                            'http://localhost:3000/images/' + infor.profile.avatarLarger
-                            // http === 'https'
-                            //     ? details[0].author.avatarLarger
-                            //     : 'http://localhost:3000/images/' + details[0].author.avatarLarger
-                        }
-                        alt="avatar"
-                    />
-                    <p>{infor.profile.nickName}</p>
-                </div>
+            <div>
+                <VideoDetails data={details}/>
             </div>
-
-            <div> {details[0].desc} </div>
+            
 
             {/* <div>
                 <ShowComment />
@@ -93,4 +70,29 @@ function Details() {
     );
 }
 
+ const VideoDetails = ({data})=>{
+    const infor = data
+    const user = infor[0]?.author
+    const http = user?.avatarLarger.split(':')[0];
+    console.log(data)
+    return(<> 
+        <div>
+            <div className={cx('wrapper-user')}>
+                <div style={{"display":"flex"}}>
+                    <img
+                        className={cx('avatar')}
+                        src={http === 'https' ? user?.avatarLarger : 'http://localhost:3001/images/' + user?.avatarLarger}
+                        alt="avatar"
+                    />
+                    <div style={{"marginLeft":"15px"}}>
+                        <h3>{user?.uniqueId}</h3>
+                        <p>{user?.nickName}</p>
+                    </div>
+                </div>
+                <div> <p>{data[0].desc}</p> </div>
+            </div>
+
+        </div>
+    </>)
+}
 export default Details;

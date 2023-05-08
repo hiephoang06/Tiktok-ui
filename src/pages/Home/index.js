@@ -13,10 +13,11 @@ function Home() {
             .then((res) => res.json())
             .then((data) => setVideos(data));
     }, []);
+
     return (
         <div className={cx('wrapper')}>
             {videos.map((video) => (
-                <Video data={video} />
+                <Video key={video} data={video} />
             ))}
         </div>
     );

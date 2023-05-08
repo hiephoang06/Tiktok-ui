@@ -6,6 +6,8 @@ const routes = {
     search: '/search',
     live: '/live',
     details: '/details/:uniqueId/:id',
+    myProfile: '/me',
+    edit:'/edit'
 };
 
 export default routes;

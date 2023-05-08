@@ -14,15 +14,29 @@ import ReactPlayer from 'react-player';
 const cx = classNames.bind(styles);
 
 const VideoContent = ({ videoUrl, likeCount, commentCount, author, desc, _id }) => {
+    const accessToken = localStorage.getItem("accessToken");
     const videoRef = useRef();
     const [playing, setPlaying] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const [like, setLike] = useState(Number(likeCount));
 
-    const handleLike = () => {
+    function handleLike  (){
+        LikeVideoApi();
         setIsLike((current) => !current);
         isLike ? setLike((prev) => prev - 1) : setLike((prev) => prev + 1);
     };
+
+    const LikeVideoApi = async () =>{
+        const res = await fetch(`http://localhost:3001/api/video/${_id}/like`,{
+            method:"post",
+            headers:{
+                'Authorization':`Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        })
+        const data = await res.json();
+        console.log(data)
+    }
 
     const options = {
         root: null,
@@ -105,7 +119,6 @@ function Video({ data }) {
                 <InforUser {...data} />
                 <FollowBtn />
             </div>
-
             <VideoContent {...data} />
         </div>
     );

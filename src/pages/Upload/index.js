@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import styles from './Upload.module.scss';
+import Button from '~/components/Button/Button';
 
 const cx = classNames.bind(styles);
 
@@ -10,6 +11,7 @@ function Upload() {
     const [isLoading, setIsLoading] = useState(false);
     const [videoAsset, setVideoAsset] = useState();
     const [wrongFileType, setWrongFileType] = useState(false);
+
     const uploadVideo = async (e) => {
         const selectedFile = e.target.files[0];
         const fileTypes = ['video/mp4', 'video/webm', 'video/ogg'];
@@ -20,6 +22,26 @@ function Upload() {
             setWrongFileType(true);
         }
     };
+
+    const accessToken = localStorage.getItem("accessToken");
+    const userID = localStorage.getItem("userID")
+
+    const handlePost=()=>{
+        fetch('http://localhost:3001/api/video/',{
+            method:"POST",
+            headers:{
+                "Authorization":`Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({
+                file:"",
+                desc:"",
+                profileId:{userID}
+                
+            }),
+        })
+    }
+
     return (
         <div className={cx('wrapper')}>
             <div>
@@ -34,7 +56,8 @@ function Upload() {
                         ) : (
                             <div>
                                 {videoAsset ? (
-                                    <div></div>
+                                    <div>
+                                    </div>
                                 ) : (
                                     <label className={cx('label-video')}>
                                         <div className={cx('inner-upload')}>
@@ -83,9 +106,7 @@ function Upload() {
                     <button type={'button'} onClick={() => {}} className={cx('cancle-btn')}>
                         Cancle
                     </button>
-                    <button type={'button'} onClick={() => {}} className={cx('post-btn')}>
-                        Post
-                    </button>
+                    <Button primary onClick={handlePost}>Post</Button>
                 </div>
             </div>
         </div>

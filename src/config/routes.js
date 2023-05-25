@@ -7,7 +7,8 @@ const routes = {
     live: '/live',
     details: '/details/:uniqueId/:id',
     myProfile: '/me',
-    edit:'/edit'
+    edit:'/edit',
+    messages:'/messages'
 };
 
 export default routes;

@@ -11,9 +11,9 @@ function Edit() {
     const accessToken = localStorage.getItem("accessToken");
     // const oldName = localStorage.getItem("name");
     // const oldUserID = localStorage.getItem("userID")
-
+    const url = process.env.REACT_APP_LOCALHOST
     async function handleSubmit(){
-        const res = await fetch('http://localhost:3001/api/profile/',{
+        const res = await fetch(url+'/api/profile/',{
             method:"PATCH",
             mode:'cors',
             headers:{
@@ -26,7 +26,7 @@ function Edit() {
             })
         })
         const data = await res.json();
-        console.log(data)
+
     }
 
     return ( 

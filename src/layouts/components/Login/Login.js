@@ -15,15 +15,15 @@ function Login() {
         localStorage.setItem("name",data.user.displayName);
         localStorage.setItem("imgURL",data.user.photoURL);        
         handleFetchAPI()
-        window.location.reload();
+        // window.location.reload();
         })
   }
-
+  const url = process.env.REACT_APP_LOCALHOST
   const handleFetchAPI = async () =>{
     const userID =  localStorage.getItem("userID");
     const name = localStorage.getItem("name");
     const imgURL = localStorage.getItem("imgURL");
-    const response = await fetch('http://localhost:3001/api/login/',{
+    const response = await fetch(url+'/api/login/',{
             method:'POST',
             mode:'cors',
             headers: {
@@ -36,9 +36,10 @@ function Login() {
             }),
           })
     const data = await response.json();
+    // console.log(data)
     localStorage.setItem("accessToken",data.accessToken);
   }
-  console.log(localStorage)
+  // console.log(localStorage)
   return (
     <div>
       <Button primary onClick={handleClick}>Login</Button>

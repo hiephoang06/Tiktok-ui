@@ -59,3 +59,27 @@
     text-align: center;
     margin-top: 0.5rem;
 }
+.btn-unfollow{
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 36px;
+    height: 44px;
+    border: 1px solid rgba(22, 24, 35, 0.12);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    float: right;
+}
+.show-video{
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    
+}

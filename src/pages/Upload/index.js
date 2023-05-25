@@ -1,47 +1,46 @@
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Upload.module.scss';
 import Button from '~/components/Button/Button';
 
 const cx = classNames.bind(styles);
 
 function Upload() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [videoAsset, setVideoAsset] = useState();
-    const [wrongFileType, setWrongFileType] = useState(false);
-
-    const uploadVideo = async (e) => {
-        const selectedFile = e.target.files[0];
-        const fileTypes = ['video/mp4', 'video/webm', 'video/ogg'];
-
-        if (fileTypes.includes(selectedFile.type)) {
-        } else {
-            setIsLoading(false);
-            setWrongFileType(true);
-        }
-    };
-
+   
+    const [caption,setCaption] = useState('');
     const accessToken = localStorage.getItem("accessToken");
-    const userID = localStorage.getItem("userID")
 
-    const handlePost=()=>{
-        fetch('http://localhost:3001/api/video/',{
-            method:"POST",
-            headers:{
-                "Authorization":`Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({
-                file:"",
-                desc:"",
-                profileId:{userID}
-                
-            }),
-        })
+    const [selectedFile, setSelectedFile] = useState();
+	const [isFilePicked, setIsFilePicked] = useState(false);
+
+    const changeHandler = (event) => {
+		setSelectedFile(event.target.files[0]);
+		setIsFilePicked(true);
+	};
+    const url = process.env.REACT_APP_LOCALHOST
+    const handlePost= async ()=>{
+        if(accessToken){
+            if(isFilePicked !== null){
+                const formData = new FormData();
+                formData.append('uploaded_file', selectedFile);
+                formData.append('desc',caption)
+                const res = await fetch(url+'/api/video/',{
+                    method:'POST',
+                    headers:{
+                        "Authorization":`Bearer ${accessToken}`,                
+                    },
+                    body:formData,
+                })
+            } else {
+                alert('chưa có file')
+            }
+        } else { 
+            alert('dang nhap di')
+        }
+ 
     }
-
     return (
         <div className={cx('wrapper')}>
             <div>
@@ -51,12 +50,10 @@ function Upload() {
                         <p className={cx('text2')}>Dang video vao tai khoan cua ban</p>
                     </div>
                     <div className={cx('upload-video')}>
-                        {isLoading ? (
-                            <p>Uploading....</p>
-                        ) : (
                             <div>
-                                {videoAsset ? (
+                                {isFilePicked ? (
                                     <div>
+                                        <div>Video</div>
                                     </div>
                                 ) : (
                                     <label className={cx('label-video')}>
@@ -84,29 +81,31 @@ function Upload() {
                                             </p>
                                             <p className={cx('select-btn')}>Select file</p>
                                         </div>
-                                        <input
-                                            type={'file'}
-                                            name={'upload-video'}
-                                            onChange={uploadVideo}
-                                            style={{ width: '0px', height: '0px' }}
-                                        />
+                                        <input type="file" name="file" onChange={changeHandler} />
                                     </label>
                                 )}
                             </div>
-                        )}
                     </div>
                 </div>
             </div>
             <div className={cx('form-upload')}>
                 <div>
                     <label>Caption:</label>
-                    <input type={'text'} value={''} onChange={() => {}} className={cx('input-caption')} />
+                    <input type={'text'}  onChange={(e) => setCaption(e.target.value)} className={cx('input-caption')} />
                 </div>
                 <div style={{ display: 'flex', marginTop: '2.5rem', gap: '1.5rem' }}>
                     <button type={'button'} onClick={() => {}} className={cx('cancle-btn')}>
                         Cancle
                     </button>
-                    <Button primary onClick={handlePost}>Post</Button>
+                    {isFilePicked? (
+                        <div>
+                            <Button primary onClick={handlePost}>Post</Button> 
+                            <Button> Chỉnh sửa</Button>
+                        </div>
+                        ):(
+                            <></>
+                        )}
+                    
                 </div>
             </div>
         </div>

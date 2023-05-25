@@ -58,3 +58,43 @@
         text-decoration: underline;
     }
 }
+.wrapper-cmt {
+    border: solid;
+    border-top: 0.5rem;
+    border-color: rgb(229 231 235);
+    padding-top: 1rem;
+    padding-left: 2.5rem; /* 40px */
+    padding-right: 2.5rem; /* 40px */
+    background: #f8f8f8;
+    border-bottom: 0.5rem;
+}
+.inner-cmt {
+    width: 400px;
+    overflow: scroll;
+}
+.comment {
+    display: flex;
+}
+.text-cmt {
+    margin-left: 100px;
+    display: flex;
+    flex-direction: column;
+}
+.wrapper-user-cmt{
+    display: flex;
+}
+.avatar-user-cmt {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.infor-user-cmt {
+    margin-left: 1rem;
+    min-width: 80%;
+}
+.name-user-cmt {
+    &:hover {
+        text-decoration: underline;
+    }
+}

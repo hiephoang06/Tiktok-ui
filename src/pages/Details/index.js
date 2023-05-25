@@ -1,18 +1,19 @@
-import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useEffect, useRef, useState } from 'react';
 import InforUser from '~/components/InforUser';
 import Comment from '~/components/Comment';
-import ShowComment from '~/layouts/components/ShowComments';
+// import ShowComment from '~/layouts/components/ShowComments';
 import styles from './Details.module.scss';
 import ReactPlayer from 'react-player';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function Details() {
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
+    const url = process.env.REACT_APP_LOCALHOST  
 
     // const videoRef = useRef(null);
     // const [playing, setPlaying] = useState(false);
@@ -23,13 +24,27 @@ function Details() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetch(`http://localhost:3001/api/video/${params.uniqueId}/${params.id}`)
+            const data = await fetch(url+`/api/video/${params.uniqueId}/${params.id}`)
                 .then((res) => res.json())
                 .then((details) => setDetails(details));
         };
         fetchData().catch(console.error);
     }, []);
 
+    const [ShowComment,setShowComment] = useState();
+
+    const handleFetchAPI = async () =>{
+        const response = await fetch(url+`/api/video/${params.id}/comments`,)
+        const result = await response.json();
+        setShowComment(result)
+      }
+
+    useEffect(() => {
+        handleFetchAPI()
+    },[])
+
+
+    
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -43,7 +58,7 @@ function Details() {
                 <div style={{ position: 'relative' }}>
                     <div className={cx('video')}>
                         <ReactPlayer
-                            url={'http://localhost:3001/videos/' + details[0]?.videoUrl}
+                            url={url+'/videos/' + details[0]?.videoUrl}
                             height="100%"
                             playing={true}
                             controls={true}
@@ -52,20 +67,18 @@ function Details() {
                 </div>
             </div>
 
-            <div>
+            <div style={{'marginLeft':'5px'}}>
                 <VideoDetails data={details}/>
+                <div>
+                    {ShowComment?.map((cmt) => (
+                        <ShowComments key={cmt} data={cmt}/>
+                    ))}
+                    
+                </div>
+                <div>
+                    <Comment data={details}/>
+                </div>
             </div>
-            
-
-            {/* <div>
-                <ShowComment />
-                <ShowComment />
-                <ShowComment />
-            </div>
-            <div>
-                <Comment />
-            </div> */}
-            {/* </div> */}
         </div>
     );
 }
@@ -74,14 +87,14 @@ function Details() {
     const infor = data
     const user = infor[0]?.author
     const http = user?.avatarLarger.split(':')[0];
-    console.log(data)
+    const url = process.env.REACT_APP_LOCALHOST
     return(<> 
         <div>
             <div className={cx('wrapper-user')}>
                 <div style={{"display":"flex"}}>
                     <img
                         className={cx('avatar')}
-                        src={http === 'https' ? user?.avatarLarger : 'http://localhost:3001/images/' + user?.avatarLarger}
+                        src={http === 'https' ? user?.avatarLarger : url+'/images/' + user?.avatarLarger}
                         alt="avatar"
                     />
                     <div style={{"marginLeft":"15px"}}>
@@ -94,5 +107,42 @@ function Details() {
 
         </div>
     </>)
+}
+
+const ShowComments = ({data}) => {
+    console.log(data)
+    const http = data?.author?.avatarLarger.split(':')[0];
+    const url = process.env.REACT_APP_LOCALHOST
+    return (
+        <div className={cx('wrapper-cmt')}>
+            <div className={cx('inner-cmt')}>
+                <div className={cx('wrapper-user-cmt')}>
+                    <img
+                        className={cx('avatar-user-cmt')}
+                        src={http === 'https' ? data?.author?.avatarLarger : url+'/images/' + data?.author?.avatarLarger}
+                        alt="avatar"
+                    />
+                    <div className={cx('infor-user-cmt')}>
+                        <div>
+                            {/* <Link to={'@' + author.uniqueId}> */}
+                            <Link to={{
+                                pathname:'@'+ data.author._id,
+                                state:{id:data.author._id}
+                            }}>
+                            </Link>
+                            <a href="#"> {data.author.nickName}</a>
+                        </div>
+                    </div>
+                </div>
+                <div className={cx('comment')}>
+                    {data.message}
+                    <div className={cx('text-cmt')}>
+                        <FontAwesomeIcon icon={faHeart} />
+                        <span>0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
 export default Details;

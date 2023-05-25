@@ -5,12 +5,13 @@ import { Link } from "react-router-dom";
 const cx = classNames.bind(style)
 
 function VideoProfile({data}) {
-    console.log(data)
+    // console.log(data)
+    const url = process.env.REACT_APP_LOCALHOST
     return ( <>
     <Link to={'/details/' + data.author._id + '/' + data._id}>
         <video
             className={cx('video')}
-            src={'http://localhost:3001/videos/' + data.videoUrl}
+            src={url+'/videos/' + data.videoUrl}
             controls={true}
             loop={true}
         />

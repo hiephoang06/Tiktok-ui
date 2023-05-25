@@ -21,13 +21,19 @@ const VideoContent = ({ videoUrl, likeCount, commentCount, author, desc, _id }) 
     const [like, setLike] = useState(Number(likeCount));
 
     function handleLike  (){
-        LikeVideoApi();
-        setIsLike((current) => !current);
-        isLike ? setLike((prev) => prev - 1) : setLike((prev) => prev + 1);
-    };
+        if(accessToken){
+            LikeVideoApi();
+            setIsLike((current) => !current);
+            isLike ? setLike((prev) => prev - 1) : setLike((prev) => prev + 1); 
+        } else{
+            alert('dang nhap di')
+        }
 
+       
+    };
+    const url = process.env.REACT_APP_LOCALHOST
     const LikeVideoApi = async () =>{
-        const res = await fetch(`http://localhost:3001/api/video/${_id}/like`,{
+        const res = await fetch(url+`/api/video/${_id}/like`,{
             method:"post",
             headers:{
                 'Authorization':`Bearer ${accessToken}`,
@@ -58,7 +64,6 @@ const VideoContent = ({ videoUrl, likeCount, commentCount, author, desc, _id }) 
             }
         }
     }, [isVisibile]);
-
     return (
         <div>
             <div>{desc}</div>
@@ -75,7 +80,7 @@ const VideoContent = ({ videoUrl, likeCount, commentCount, author, desc, _id }) 
                     /> */}
                     <video
                         className={cx('video')}
-                        src={'http://localhost:3001/videos/' + videoUrl}
+                        src={url+'/videos/' + videoUrl}
                         ref={videoRef}
                         controls={true}
                         loop={true}
@@ -113,6 +118,7 @@ const VideoContent = ({ videoUrl, likeCount, commentCount, author, desc, _id }) 
 };
 
 function Video({ data }) {
+
     return (
         <div className={cx('video-wrapper')}>
             <div className={cx('info')}>

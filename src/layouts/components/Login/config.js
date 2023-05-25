@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
 import {getAuth,GoogleAuthProvider} from "firebase/auth"
+import { getFirestore } from "firebase/firestore";
+import { getMessaging } from "firebase/messaging";
 const firebaseConfig = {
   apiKey: "AIzaSyCyFAbNkt_hhsbBhBGCnLY9NSq9JZbwVec",
   authDomain: "tiktok-8b393.firebaseapp.com",
@@ -14,4 +16,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-export{auth, provider};
+
+const db = getFirestore(app)
+const messaging = getMessaging(app);
+
+export{auth, provider,db,messaging};

@@ -10,7 +10,7 @@ function InforUser({ author }) {
     const [isFollowing, setIsFollowing] = useState(false);
     const { avatarLarger, nickName, uniqueId, _id } = author;
     const http = avatarLarger.split(':')[0];
-
+    const url = process.env.REACT_APP_LOCALHOST
     // console.log(http);
 
     const handleFollow = () => {
@@ -21,7 +21,7 @@ function InforUser({ author }) {
         <div className={cx('wrapper')}>
             <img
                 className={cx('avatar')}
-                src={http === 'https' ? avatarLarger : 'http://localhost:3001/images/' + avatarLarger}
+                src={http === 'https' ? avatarLarger : url+'/images/' + avatarLarger}
                 alt="avatar"
             />
             <div className={cx('infor')}>

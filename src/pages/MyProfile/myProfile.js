@@ -10,12 +10,13 @@ const cx = classNames.bind(styles);
 
 const UserInfor = ({profile}) => {
     const http = profile?.avatarLarger.split(':')[0];
+    const url = process.env.REACT_APP_LOCALHOST
     return (
     <div>
             <div className={cx('wrapper')}>
                 <img 
                     className={cx('avatar')}
-                    src={http === 'https' ? profile?.avatarLarger : 'http://localhost:3001/images/' + profile?.avatarLarger}
+                    src={http === 'https' ? profile?.avatarLarger : url+'/images/' + profile?.avatarLarger}
                 />
                 <div className={cx('infor')}>
                     <div>
@@ -55,10 +56,10 @@ function MyProfile() {
             setVideoList(videoLike)
         }
     },[showUserVideo,videoLike,userVideo])
-
+    const url = process.env.REACT_APP_LOCALHOST
     useEffect(() => {
         async function FetchVideoLike(){
-            const response = await fetch('http://localhost:3001/api/video/likedvideo',{
+            const response = await fetch(url+'/api/video/likedvideo',{
                 method:'get',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -73,7 +74,7 @@ function MyProfile() {
 
     useEffect(() => {
         async function FetchUserVideo(){
-            const response = await fetch('http://localhost:3001/api/video/postedvideo',{
+            const response = await fetch(url+'/api/video/postedvideo',{
                 method:'get',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -96,7 +97,7 @@ function MyProfile() {
 
     useEffect(() => {
         async function FetchData(){
-            const response = await fetch('http://localhost:3001/api/profile/',{
+            const response = await fetch(url+'/api/profile/',{
                 method:'get',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -108,7 +109,7 @@ function MyProfile() {
         }
         FetchData();
     },[])
-
+    console.log(localStorage)
     localStorage.setItem("userID",infor?.profile?._id)
     localStorage.setItem("uniqueId",infor?.profile?.uniqueId)
 
@@ -170,7 +171,7 @@ function MyProfile() {
                         <VideoProfile key={video} data={video}/>
                     ))
                 ) : (
-                    <h1>Khogn co video</h1>
+                    <h1>Khong co video</h1>
                 )}
                 
             </div>

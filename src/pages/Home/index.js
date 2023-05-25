@@ -7,9 +7,9 @@ const cx = classNames.bind(styles);
 
 function Home() {
     const [videos, setVideos] = useState([]);
-
+    const url = process.env.REACT_APP_LOCALHOST
     useEffect(() => {
-        fetch('http://localhost:3001/api/video')
+        fetch(url+'/api/video')
             .then((res) => res.json())
             .then((data) => setVideos(data));
     }, []);
@@ -17,7 +17,7 @@ function Home() {
     return (
         <div className={cx('wrapper')}>
             {videos.map((video) => (
-                <Video key={video} data={video} />
+                <Video key={video.id} data={video} />
             ))}
         </div>
     );

@@ -13,6 +13,7 @@ import Live from '~/pages/Live';
 import Details from '~/pages/Details';
 import MyProfile from '~/pages/MyProfile/myProfile';
 import Edit from '~/pages/Edit/edit';
+import Messages from '~/pages/Messages/messages';
 
 // Public routes
 const publicRoutes = [
@@ -24,7 +25,8 @@ const publicRoutes = [
     { path: config.routes.search, component: Search, layout: null },
     { path: config.routes.details, component: Details, layout: null },
     { path: config.routes.myProfile, component:MyProfile },
-    { path:config.routes.edit, component:Edit},
+    { path: config.routes.edit, component:Edit},
+    { path: config.routes.messages, component:Messages, layout:null}
 
 ];
 
